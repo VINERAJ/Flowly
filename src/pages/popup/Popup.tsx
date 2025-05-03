@@ -54,7 +54,7 @@ export default function Popup() {
       <header className="flex flex-col items-center justify-center text-white">
         <img
           src={logo}
-          className="h-36 pointer-events-none animate-spin-slow"
+          className="w-full h-36 object-contain"
           alt="logo"
         />
         <p>Edit <code>src/pages/popup/Popup.tsx</code> and save to reload.</p>
