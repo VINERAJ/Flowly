@@ -5,6 +5,27 @@ const SECOND = 1000;
 const MINUTE = SECOND * 60;
 
 export default function Popup({ deadline = new Date().toString() }) {
+  const markProductive = () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const tab = tabs[0];
+      if (tab.id) {
+        chrome.storage.local.get({ productiveTabs: {} }, (result) => {
+          const productiveTabs = result.productiveTabs;
+          productiveTabs[tab.id] = true;
+          chrome.storage.local.set({ productiveTabs }, () => {
+            console.log(`Tab ${tab.id} marked as productive`);
+            // Add 3 points since the tab is being marked as productive.
+            chrome.storage.local.get({ points: 0 }, (res) => {
+              const newPoints = res.points + 3;
+              chrome.storage.local.set({ points: newPoints }, () => {
+                console.log("Added 3 points, new total:", newPoints);
+              });
+            });
+          });
+        });
+      }
+    });
+  };
   if (deadline=="") {
     return (
       <div className="timer">
@@ -38,6 +59,14 @@ export default function Popup({ deadline = new Date().toString() }) {
                     </div>
                 </div>
             ))}
+      <header>
+         <button
+          onClick={markProductive}
+          className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded"
+        >
+          Mark Tab Productive
+        </button>
+      </header>
         </div>
   );
 }
