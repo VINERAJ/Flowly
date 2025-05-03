@@ -57,16 +57,6 @@ export default function Popup() {
           className="w-full h-36 object-contain"
           alt="logo"
         />
-        <p>Edit <code>src/pages/popup/Popup.tsx</code> and save to reload.</p>
-        <a
-          className="text-blue-400"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React!
-        </a>
-        <p>Popup styled with TailwindCSS!</p>
         <p>
           Remaining work time: <strong>{remainingTime}</strong>
         </p>
