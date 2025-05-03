@@ -1,5 +1,6 @@
 {
   "manifest_version": 3,
+  "version": "1.0.0",
   "name": "name in manifest.json",
   "description": "description in manifest.json",
   "options_ui": {
@@ -18,8 +19,11 @@
     "128": "icon-128.png"
   },
   "permissions": [
-    "activeTab"
+    "tabs"
   ],
+  "background": {
+    "service_worker": "src/pages/background/index.js"
+  },
   "content_scripts": [
     {
       "matches": [
