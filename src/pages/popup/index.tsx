@@ -8,7 +8,8 @@ function init() {
   const rootContainer = document.querySelector("#__root");
   if (!rootContainer) throw new Error("Can't find Popup root element");
   const root = createRoot(rootContainer);
-  root.render(<Popup />);
+  const time = new Date(Date.now() + 10 * 60 * 1000)
+  root.render(<Popup deadline={time.toString()}/>);
 }
 
 init();

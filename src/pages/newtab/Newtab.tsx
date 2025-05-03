@@ -1,6 +1,8 @@
 import React from 'react';
 import logo from '@assets/img/logo.svg';
 import '@pages/newtab/Newtab.css';
+import { Link,Route, Routes } from 'react-router-dom';
+import Timer from '../timer/Timer';
 
 export default function Newtab() {
   return (
@@ -10,14 +12,14 @@ export default function Newtab() {
         <p>
           Edit <code>src/pages/newtab/Newtab.tsx</code> and save to reload.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React!
-        </a>
+        {/* <Link to='/timer'>
+            View Full Menu
+        </Link>
+        <Routes>
+          <Route path="/timer">
+            <Timer />
+          </Route>
+        </Routes> */}
       </header>
     </div>
   );
