@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from '@assets/img/logo.svg';
+import logo from '@assets/img/flowgo.png';
 
 export default function Popup() {
   const [remainingTime, setRemainingTime] = useState<string>("");
@@ -50,19 +50,9 @@ export default function Popup() {
       <header className="flex flex-col items-center justify-center text-white">
         <img
           src={logo}
-          className="h-36 pointer-events-none animate-spin-slow"
+          className="w-full h-36 object-contain"
           alt="logo"
         />
-        <p>Edit <code>src/pages/popup/Popup.tsx</code> and save to reload.</p>
-        <a
-          className="text-blue-400"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React!
-        </a>
-        <p>Popup styled with TailwindCSS!</p>
         <p>
           Remaining work time: <strong>{remainingTime}</strong>
         </p>
