@@ -6,11 +6,12 @@ export default function Newtab() {
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
-    const storedPoints = localStorage.getItem('points');
-    let currentPoints = storedPoints ? parseInt(storedPoints, 10) : 0;
-    currentPoints += 50;
-    localStorage.setItem('points', currentPoints.toString());
-    setPoints(currentPoints);
+    chrome.storage.local.get({ points: 0 }, (result) => {
+      const currentPoints = result.points + 50; // Add 50 when opening a new tab.
+      chrome.storage.local.set({ points: currentPoints }, () => {
+        setPoints(currentPoints);
+      });
+    });
   }, []);
 
   return (

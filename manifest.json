@@ -19,7 +19,8 @@
     "128": "icon-128.png"
   },
   "permissions": [
-    "tabs"
+    "tabs",
+    "storage"
   ],
   "background": {
     "service_worker": "src/pages/background/index.js"
