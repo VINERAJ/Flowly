@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from '@assets/img/logo.svg';
+import logo from '@assets/img/logo.png';
 
 export default function Popup() {
   const [remainingTime, setRemainingTime] = useState<string>("");

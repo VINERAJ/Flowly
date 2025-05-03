@@ -20,7 +20,8 @@
   },
   "permissions": [
     "tabs",
-    "storage"
+    "storage",
+    "notifications"
   ],
   "background": {
     "service_worker": "src/pages/background/index.js"

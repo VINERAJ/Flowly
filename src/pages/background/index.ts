@@ -1,3 +1,5 @@
+import logo from '@assets/img/logo.svg';
+
 console.log('background script loaded');
 
 // Set workTime using chrome.storage.local
@@ -24,6 +26,14 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
           const newPoints = points - 3;
           chrome.storage.local.set({ points: newPoints }, () => {
             console.log("Subtracted three points, new total:", newPoints);
+
+            // Show a notification to the user
+            // chrome.notifications.create({
+            //   type: 'basic',
+            //   iconUrl: '@assets/img/logo.svg', // Replace with the path to your extension's icon
+            //   title: 'Points Deducted',
+            //   message: 'You lost 3 points! Mark this tab as productive to avoid losing points.',
+            // });
           });
         } else {
           console.log("Timer is not running. No points deducted.");
