@@ -5,6 +5,7 @@ import { Link,Route, Routes } from 'react-router-dom';
 import Timer from '../timer/Timer';
 
 export default function Newtab() {
+  localStorage.setItem("workTime", new Date(Date.now() + 5 * 60 * 1000).toString());
   return (
     <div className="App">
       <header className="App-header">

@@ -5,6 +5,15 @@ const SECOND = 1000;
 const MINUTE = SECOND * 60;
 
 export default function Popup({ deadline = new Date().toString() }) {
+  if (deadline=="") {
+    return (
+      <div className="timer">
+            <h1>
+              Enter time on main screen to start
+            </h1>
+        </div>
+    );
+  }
   const parsedDeadline = useMemo(() => Date.parse(deadline), [deadline]);
   const [time, setTime] = useState(parsedDeadline - Date.now());
   useEffect(() => {
