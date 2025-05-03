@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import logo from '@assets/img/logo.svg';
 import '@pages/newtab/Newtab.css';
+import { Link,Route, Routes } from 'react-router-dom';
+import Timer from '../timer/Timer';
 
 export default function Newtab() {
+  localStorage.setItem("workTime", new Date(Date.now() + 5 * 60 * 1000).toString());
   const [points, setPoints] = useState(0);
   const [remainingTime, setRemainingTime] = useState<string>("");
 
@@ -45,7 +48,7 @@ export default function Newtab() {
 
     return () => clearInterval(timerInterval); // Cleanup interval on component unmount
   }, []);
-
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -59,6 +62,14 @@ export default function Newtab() {
         <p>
           Edit <code>src/pages/newtab/Newtab.tsx</code> and save to reload.
         </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React!
+        </a>
       </header>
     </div>
   );

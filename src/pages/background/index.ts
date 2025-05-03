@@ -1,8 +1,5 @@
 console.log('background script loaded');
 
-// Set workTime using chrome.storage.local
-chrome.storage.local.set({ workTime: new Date(Date.now() + 5 * 60 * 1000).toString() });
-
 chrome.tabs.onActivated.addListener((activeInfo) => {
   chrome.storage.local.get({ productiveTabs: {}, workTime: null }, (result) => {
     const productiveTabs = result.productiveTabs;
