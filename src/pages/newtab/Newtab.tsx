@@ -44,6 +44,7 @@ export default function Newtab() {
           const workTimeMs = new Date(workTime).getTime();
           const currentTime = Date.now();
           const timeLeft = workTimeMs - currentTime;
+          localStorage.setItem('workTime', workTime);
 
           if (timeLeft > 0) {
             const minutes = Math.floor(timeLeft / (1000 * 60));
