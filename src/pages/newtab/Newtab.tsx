@@ -41,12 +41,12 @@ export default function Newtab() {
 
   // Productivity Timer State
   const [prodRemainingTime, setProdRemainingTime] = useState<string>("");
-  const [prodSelectedMinutes, setProdSelectedMinutes] = useState(20);
+  const [prodSelectedMinutes, setProdSelectedMinutes] = useState(20); // Default productivity time
   const [prodTimerRunning, setProdTimerRunning] = useState(false);
 
   // Break Timer State
   const [breakRemainingTime, setBreakRemainingTime] = useState<string>("");
-  const [breakSelectedMinutes, setBreakSelectedMinutes] = useState(5);
+  const [breakSelectedMinutes, setBreakSelectedMinutes] = useState(10); // Changed default to 10 minutes
   const [breakTimerRunning, setBreakTimerRunning] = useState(false);
   const [breakActivityOptions, setBreakActivityOptions] = useState<string[]>([]);
   const [selectedBreakActivity, setSelectedBreakActivity] = useState<string | null>(null);
@@ -241,12 +241,14 @@ export default function Newtab() {
             id="timerSelect"
             value={prodSelectedMinutes}
             onChange={(e) => setProdSelectedMinutes(parseInt(e.target.value, 10))}
-            className="px-2 py-1 rounded text-black" // Added text-black for visibility
+            className="px-2 py-1 rounded text-black"
             disabled={prodTimerRunning}
           >
-            {Array.from({ length: 60 }, (_, i) => i + 1).map(min => ( // Increased range
+            <option value={1}>1 minute</option>
+            {Array.from({ length: 9 }, (_, i) => 20 + i * 5).map(min => (
               <option key={min} value={min}>{min} minutes</option>
             ))}
+            {/* 20, 25, 30, ..., 60 */}
           </select>
           <button
             onClick={startProdTimer}
@@ -282,18 +284,20 @@ export default function Newtab() {
       {selectedBreakActivity && (
          <div className="mt-4">
             <p className="mb-2">Set break duration for: <strong>{selectedBreakActivity}</strong></p>
-            <label htmlFor="breakTimerSelect" className="mr-2 text-white">
+            <label htmlFor="breakTimerSelect" className="mr-2 text-white"> {/* Changed label color for light mode */}
               Duration:
             </label>
             <select
               id="breakTimerSelect"
               value={breakSelectedMinutes}
               onChange={(e) => setBreakSelectedMinutes(parseInt(e.target.value, 10))}
-              className="px-2 py-1 rounded text-black"
+              className="px-2 py-1 rounded text-black" // Ensures text is visible in light mode
             >
-              {Array.from({ length: 30 }, (_, i) => (i + 1) * 1).map(min => ( // Shorter breaks typical
+              <option value={1}>1 minute</option>
+              {Array.from({ length: 5 }, (_, i) => 10 + i * 5).map(min => (
                 <option key={min} value={min}>{min} minutes</option>
               ))}
+              {/* 10, 15, 20, 25, 30 */}
             </select>
             <button
               onClick={startBreakTimer}
