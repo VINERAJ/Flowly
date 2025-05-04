@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import logo from '@assets/img/logo.png';
 
+chrome.storage.local.set({isProductive: true});
+
 export default function Popup() {
   const [remainingTime, setRemainingTime] = useState<string>("");
-
   // Timer logic remains using localStorage for now
   useEffect(() => {
     const timerInterval = setInterval(() => {
