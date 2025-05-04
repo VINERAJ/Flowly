@@ -23,7 +23,7 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
 
         if (timeLeft > 0) {
           const points = parseInt(result.points || '0', 10);
-          const newPoints = points - 3;
+          const newPoints = points - 2;
           chrome.storage.local.set({ points: newPoints }, () => {
             console.log("Subtracted three points, new total:", newPoints);
 
@@ -48,3 +48,28 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
     });
   });
 });
+
+// Add 1 point every 2 minutes if the timer is running
+setInterval(() => {
+  chrome.storage.local.get(['workTime', 'points'], (result) => {
+    const workTime = result.workTime;
+
+    if (workTime) {
+      const workTimeMs = new Date(workTime).getTime();
+      const currentTime = Date.now();
+      const timeLeft = workTimeMs - currentTime;
+
+      if (timeLeft > 0) {
+        const points = parseInt(result.points || '0', 10);
+        const newPoints = points + 1;
+        chrome.storage.local.set({ points: newPoints }, () => {
+          console.log("Added one point, new total:", newPoints);
+        });
+      } else {
+        console.log("Timer expired. No points added.");
+      }
+    } else {
+      console.log("No timer set. No points added.");
+    }
+  });
+}, 2 * 60 * 1000); // Runs every 2 minutes

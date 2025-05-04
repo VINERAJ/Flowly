@@ -8,6 +8,22 @@ export default function Newtab() {
   const [selectedMinutes, setSelectedMinutes] = useState(20);
   const [timerRunning, setTimerRunning] = useState(false);
 
+  // Mark the tab as productive when the component mounts
+  useEffect(() => {
+    chrome.storage.local.set({ isProductiveTab: true });
+  }, []);
+
+  // Fetch points every second for a live update
+  useEffect(() => {
+    const pointsInterval = setInterval(() => {
+      chrome.storage.local.get(['points'], (result) => {
+        const storedPoints = parseInt(result.points || '0', 10);
+        setPoints(storedPoints);
+      });
+    }, 1000);
+    return () => clearInterval(pointsInterval);
+  }, []);
+
   // Start the timer with the given minutes
   const startTimer = () => {
     if (!timerRunning) {
@@ -36,7 +52,7 @@ export default function Newtab() {
           const currentTime = Date.now();
           const timeLeft = workTimeMs - currentTime;
           localStorage.setItem('workTime', workTime);
-
+  
           if (timeLeft > 0) {
             const minutes = Math.floor(timeLeft / (1000 * 60));
             const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
@@ -85,7 +101,7 @@ export default function Newtab() {
               disabled={timerRunning}
             >
               {
-                Array.from({ length: 41 }, (_, i) => i + 1).map(min => ( //change 1 to 20
+                Array.from({ length: 41 }, (_, i) => i + 1).map(min => (
                   <option key={min} value={min}>{min} minutes</option>
                 ))
               }
@@ -105,7 +121,6 @@ export default function Newtab() {
           </p>
         )}
         <p className="mt-4">
-          Edit <code>src/pages/newtab/Newtab.tsx</code> and save to reload.
         </p>
       </header>
     </div>
