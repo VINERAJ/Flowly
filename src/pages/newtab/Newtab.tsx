@@ -6,7 +6,7 @@ import '@pages/newtab/Newtab.css'; // Ensure this CSS file exists and styles app
 const PRODUCTIVITY_MODE = 'PRODUCTIVITY';
 const BREAK_MODE_SELECT = 'BREAK_SELECT';
 const BREAK_MODE_TIMER = 'BREAK_TIMER';
-const BREAK_ACTIVITIES = ["activity 1", "activity 2", "activity 3"];
+const BREAK_ACTIVITIES = ["Journal", "Yoga", "Cardio", "Video game", "TV Episode", "YouTube Video", "Strength Exercises", "Meditate", "Listen to music", "Scroll on social media", "Chat with a friend", "Arts & Crafts", "Finish a chore", "Eat a snack", "Go for a walk"];
 const ENCOURAGEMENTS = [
   "Great job staying focused!",
   "Keep up the amazing work!",
@@ -79,7 +79,9 @@ export default function Newtab() {
           } else {
             setMode(BREAK_MODE_SELECT);
             setBreakTimerRunning(false);
-            setBreakActivityOptions(BREAK_ACTIVITIES); // TODO: RANDOMIZE
+            const shuffledActivities = [...BREAK_ACTIVITIES].sort(() => 0.5 - Math.random());
+            const randomActivities = shuffledActivities.slice(0, 3);
+            setBreakActivityOptions(randomActivities);
           }
           setProdTimerRunning(false); // Ensure prod timer is off
         }
