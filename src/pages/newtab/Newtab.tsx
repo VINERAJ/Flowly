@@ -18,25 +18,16 @@ export default function Newtab() {
   };
 
   useEffect(() => {
-    // Update points when opening a new tab
-    chrome.storage.local.get(['points', 'workTime'], (result) => {
-      const currentPoints = parseInt(result.points || '0', 10);
-      setPoints(currentPoints);
-
-      const workTime = result.workTime;
-      if (workTime) {
-        const workTimeMs = new Date(workTime).getTime();
-        const currentTime = Date.now();
-        const timeLeft = workTimeMs - currentTime;
-
-        if (timeLeft > 0) {
-          setTimerRunning(true);
-        } else {
-          setTimerRunning(false);
-        }
+    const updateTitle = () => {
+      if (remainingTime) {
+        document.title = `${remainingTime}`;
+      } else {
+        document.title = "New Tab";
       }
-    });
-
+    };
+  
+    updateTitle(); // Update the title initially
+  
     const timerInterval = setInterval(() => {
       chrome.storage.local.get(['workTime'], (result) => {
         const workTime = result.workTime;
@@ -44,7 +35,7 @@ export default function Newtab() {
           const workTimeMs = new Date(workTime).getTime();
           const currentTime = Date.now();
           const timeLeft = workTimeMs - currentTime;
-
+  
           if (timeLeft > 0) {
             const minutes = Math.floor(timeLeft / (1000 * 60));
             const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
@@ -53,20 +44,22 @@ export default function Newtab() {
           } else {
             setRemainingTime("Time's up!");
             setTimerRunning(false);
-            // Remove workTime after finished
             chrome.storage.local.remove('workTime');
             clearInterval(timerInterval);
           }
         } else {
-          // When no timer is active, clear remaining time
           setRemainingTime("");
           setTimerRunning(false);
         }
+        updateTitle(); // Update the title whenever the timer updates
       });
     }, 1000);
-
-    return () => clearInterval(timerInterval);
-  }, []);
+  
+    return () => {
+      clearInterval(timerInterval);
+      document.title = "New Tab"; // Reset the title when the component unmounts
+    };
+  }, [remainingTime]);
 
   return (
     <div className="App">
@@ -91,7 +84,7 @@ export default function Newtab() {
               disabled={timerRunning}
             >
               {
-                Array.from({ length: 41 }, (_, i) => i + 20).map(min => (
+                Array.from({ length: 41 }, (_, i) => i + 1).map(min => ( //change 1 to 20
                   <option key={min} value={min}>{min} minutes</option>
                 ))
               }
