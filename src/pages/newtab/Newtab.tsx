@@ -324,9 +324,8 @@ export default function Newtab() {
 
   return (
     // Added dynamic background class and basic light/dark theme differentiation
-    <div className={`App ${isProductive ? 'theme-dark' : 'theme-light'}`}>
-       {/* Apply dynamic class to header */}
-      <header className={`App-header ${backgroundClass}`}>
+    <div className={`App ${isProductive ? 'theme-dark' : 'theme-light'} fade-in`}>
+      <header className={`App-header ${backgroundClass} fade-in`}>
         <img src={logo} className="App-logo" alt="logo" />
         <p className="text-2xl mb-4">
           You have <strong>{points}</strong> points.

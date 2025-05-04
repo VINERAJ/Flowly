@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from '@assets/img/logo.png';
+import logo from '@assets/img/logo.png'; // Make sure this path is correct
 
 // Helper function (can be moved to a shared utils file)
 function formatTime(ms: number): string {
@@ -7,7 +7,9 @@ function formatTime(ms: number): string {
   const totalSeconds = Math.floor(ms / 1000);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  return `${minutes}m ${seconds}s`;
+  // Pad seconds with a leading zero if less than 10
+  const paddedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+  return `${minutes}m ${paddedSeconds}s`;
 }
 
 export default function Popup() {
@@ -44,7 +46,6 @@ export default function Popup() {
 
         setTimerRunning(running);
         setRemainingTime(running ? formatTime(timeLeftMs) : (productive ? "No work timer set" : "No break timer set"));
-
       });
     };
 
@@ -60,13 +61,17 @@ export default function Popup() {
     chrome.storage.onChanged.addListener(listener);
 
     // Set up an interval to update the displayed time
-    const intervalId = setInterval(syncState, 1000); // Re-sync every second to update time
+    // We sync every minute only if a timer is running to save resources
+    const intervalId = timerRunning ? setInterval(syncState, 60000) : undefined;
 
+    // Clear interval when timer stops or component unmounts
     return () => {
         chrome.storage.onChanged.removeListener(listener);
-        clearInterval(intervalId);
+        if (intervalId) {
+            clearInterval(intervalId);
+        }
     }
-  }, []); // Run only once on mount
+  }, [timerRunning]); // Re-run effect if timerRunning state changes
 
   // Mark Productive Button Logic (Only relevant in Productivity mode)
   const markProductive = () => {
@@ -96,69 +101,82 @@ export default function Popup() {
     });
   };
 
-
-  // --- Render Logic ---
-
   if (isProductive === null) {
-    return <div className="w-64 text-white text-center p-4 bg-gray-800">Loading...</div>; // Added width
+    // Loading state should also fill the popup window
+    return <div className="w-full h-full flex items-center justify-center text-white bg-gray-800 rounded-lg shadow-lg">Loading...</div>;
   }
 
-  // Common Header
-  const renderHeader = () => (
-     <header className="flex flex-col items-center justify-center text-white mb-3">
-        <img
-          src={logo}
-          className="w-24 h-24 object-contain mb-2" // Adjusted size
-          alt="logo"
-        />
-         <p>
-          You have <strong>{points}</strong> points.
-        </p>
-      </header>
+  // Determine mode-specific classes and text colors
+  const containerClasses = `fade-in w-full h-full text-center p-4 rounded-lg shadow-lg flex flex-col ${
+    isProductive ? 'bg-gray-800 text-white' : 'bg-blue-200 text-gray-800' // Background and default text color for content
+  }`;
+
+  // Separate text color class for header elements if needed (e.g., for points)
+  const headerTextClasses = isProductive ? 'text-white' : 'text-gray-800';
+
+  const encouragement = ["Enjoy your break!", "Rest up!", "Recharge!", "You earned it!"];
+  const randomEncouragement = encouragement[Math.floor(Math.random() * encouragement.length)];
+
+
+  return (
+    <div className={containerClasses}>
+       {/* Header */}
+       <header className={`flex flex-col items-center justify-center mb-3 ${headerTextClasses}`}>
+          <img
+            src={logo}
+            className="w-24 h-24 object-contain mb-2"
+            alt="logo"
+          />
+           {/* Ensure points text uses the correct color for the mode */}
+           <p className={headerTextClasses}>
+            You have <strong>{points}</strong> points.
+          </p>
+        </header>
+
+       {/* Main Content Area - Takes available vertical space and centers its content */}
+       <div className="flex-grow flex flex-col items-center justify-center">
+          {isProductive ? (
+            <>
+              {/* Productive Content */}
+              <p className="mb-3">
+                {timerRunning ? `Remaining work time: ` : ''}
+                {/* Strong tag will inherit color from container or a specific class */}
+                <strong>{remainingTime}</strong>
+              </p>
+              {timerRunning && (
+                  <button
+                  onClick={markProductive}
+                  className="mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white text-sm"
+                  >
+                  Mark This Tab Productive
+                  </button>
+              )}
+               {!timerRunning && (
+                   <p className="text-xs text-gray-400 mt-2">Start a timer from a new tab.</p>
+               )}
+            </>
+          ) : (
+            <>
+              {/* Break Content */}
+              {/* Text color for break content inherits from container (text-gray-800) */}
+              <p className="mb-2 text-lg font-semibold">Break Time!</p>
+              <p className="mb-3">
+                {timerRunning ? `Remaining break time: ` : ''}
+                <strong>{remainingTime}</strong>
+              </p>
+              <p className="italic text-sm">{randomEncouragement}</p>
+               {!timerRunning && (
+                   <p className="text-xs text-gray-600 mt-2">Start a break timer from a new tab.</p>
+               )}
+            </>
+          )}
+       </div>
+
+       {/* Optional Footer Area (currently empty) */}
+       {/* This div exists to allow the flex-grow div above it to push content up */}
+       <div>
+           {/* Add footer content here if needed */}
+       </div>
+    </div>
   );
-
-  // Productivity Mode UI
-  if (isProductive) {
-    return (
-      <div className="w-64 text-center p-3 bg-gray-800"> {/* Darker background for productive */}
-        {renderHeader()}
-        <p className="mb-3">
-          {timerRunning ? `Remaining work time: ` : ''}
-          <strong>{remainingTime}</strong>
-        </p>
-        {/* Only show Mark Productive if a timer is actually running */}
-        {timerRunning && (
-            <button
-            onClick={markProductive}
-            className="mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white text-sm"
-            >
-            Mark This Tab Productive (+3 Pts)
-            </button>
-        )}
-         {!timerRunning && (
-             <p className="text-xs text-gray-400 mt-2">Start a timer from a new tab.</p>
-         )}
-      </div>
-    );
-  }
-  // Break Mode UI
-  else {
-     const encouragement = ["Enjoy your break!", "Rest up!", "Recharge!", "You earned it!"];
-     const randomEncouragement = encouragement[Math.floor(Math.random() * encouragement.length)];
-
-    return (
-      <div className="w-64 text-center p-3 bg-blue-200 text-gray-900"> {/* Lighter background for break */}
-         {renderHeader()} {/* Still show logo and points */}
-         <p className="mb-2 text-lg font-semibold">Break Time!</p>
-        <p className="mb-3">
-          {timerRunning ? `Remaining break time: ` : ''}
-          <strong>{remainingTime}</strong>
-        </p>
-        <p className="italic text-sm">{randomEncouragement}</p>
-         {!timerRunning && (
-             <p className="text-xs text-gray-600 mt-2">Start a break timer from a new tab.</p>
-         )}
-      </div>
-    );
-  }
 }

@@ -1,53 +1,68 @@
-/* ... existing styles ... */
-
-/* Default (Dark/Productive Theme) */
-.App.theme-dark {
-  text-align: center;
-  background-color: #282c34; /* Dark background */
-  color: white;
-}
-
-.App-header-productive {
-  background-color: #282c34;
+.App {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
 }
 
-/* Light/Break Theme */
-.App.theme-light {
-  text-align: center;
-  background-color: #a0956b; /* beige background */
-  color: #1f2937; /* Darker text */
+/* Fade‑in on load */
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Card‑like header */
+.App-header {
+  border-radius: 12px;
+  margin: 2rem auto;
+  padding: 2rem;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease;
+}
+
+/* Logo hover bounce */
+.App-logo {
+  width: 120px;
+  height: 120px;
+  transition: transform 0.6s ease;
+}
+.App-logo:hover {
+  animation: bounce 0.6s;
+}
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-12px); }
+  60% { transform: translateY(-6px); }
+}
+
+/* Button hover/active */
+button {
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+button:hover { transform: translateY(-3px) scale(1.03); }
+button:active { transform: scale(0.95); }
+
+/* Theme styles */
+.theme-dark {
+  background-color: #121212; /* Dark background */
+  color: #fff; /* Light text */
+}
+
+.theme-light {
+  background-color: #f9f9f9; /* Light background */
+  color: #333; /* Dark text */
+}
+
+/* Header Styles based on mode */
+.App-header-productive {
+    background-color: #333; /* Dark header for productive mode */
+    color: #fff;
 }
 
 .App-header-break {
-   background-color: #a0956b; /* beige background */
-   min-height: 100vh;
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: center;
-   font-size: calc(10px + 2vmin);
-   color: #1f2937; /* Darker text */
+    background-color: #f0f0f0; /* Light header for break mode */
+    color: #333;
 }
-
-/* Adjust button/select colors for light theme if needed */
-.theme-light select,
-.theme-light button {
-  /* Example: ensure text is readable on light background */
-   /* color: #1f2937; */ /* Handled by specific button classes now */
-}
-
-.theme-light .text-white {
-    color: #1f2937; /* Override text-white for light theme */
-}
-.theme-light .text-yellow-300 {
-    color: #ca8a04; /* Adjust yellow for light theme */
-}
-
-/* ... other styles ... */
