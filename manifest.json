@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "version": "1.0.0",
-  "name": "name in manifest.json",
-  "description": "description in manifest.json",
+  "name": "Flowly",
+  "description": "Encourage frequent, mindful breaks during study session",
   "options_ui": {
     "page": "src/pages/options/index.html"
   },
