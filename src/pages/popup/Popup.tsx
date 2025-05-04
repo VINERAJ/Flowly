@@ -4,6 +4,14 @@ import logo from '@assets/img/logo.png';
 chrome.storage.local.set({isProductive: true});
 
 export default function Popup() {
+  const [points, setPoints] = useState(0);
+  const [isProductive, setIsProductive] = useState<boolean | null>(null);
+  useEffect(() => {
+    chrome.storage.local.get(['isProductive', 'points'], (result) => {
+      setIsProductive(result.isProductive ?? false);
+      setPoints(parseInt(result.points || '0', 10));
+    });
+  }, []);
   const [remainingTime, setRemainingTime] = useState<string>("");
   // Timer logic remains using localStorage for now
   useEffect(() => {
@@ -27,6 +35,28 @@ export default function Popup() {
 
     return () => clearInterval(timerInterval);
   }, []);
+  if (isProductive === null) {
+    return <div className="text-white text-center p-4">Loading...</div>;
+  }
+  if (!isProductive) {
+    return (
+      <div className="absolute top-0 left-0 right-0 bottom-0 text-center h-full p-3 bg-gray-800">
+        <header className="flex flex-col items-center justify-center text-white">
+          <img
+            src={logo}
+            className="w-full h-36 object-contain"
+            alt="logo"
+          />
+          <p>
+            Remaining break time: <strong>{remainingTime}</strong>
+          </p>
+          <p>
+            You have <strong>{points}</strong> points.
+          </p>
+        </header>
+      </div>
+    );
+  }
 
   // Mark the current tab as productive.
   // Now uses chrome.storage.local so background knows not to subtract points for this tab.
