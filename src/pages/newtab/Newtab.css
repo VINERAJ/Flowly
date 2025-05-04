@@ -1,19 +1,13 @@
-.App {
+/* ... existing styles ... */
+
+/* Default (Dark/Productive Theme) */
+.App.theme-dark {
   text-align: center;
+  background-color: #282c34; /* Dark background */
+  color: white;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
+.App-header-productive {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -24,6 +18,36 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* Light/Break Theme */
+.App.theme-light {
+  text-align: center;
+  background-color: #a0956b; /* beige background */
+  color: #1f2937; /* Darker text */
 }
+
+.App-header-break {
+   background-color: #a0956b; /* beige background */
+   min-height: 100vh;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   font-size: calc(10px + 2vmin);
+   color: #1f2937; /* Darker text */
+}
+
+/* Adjust button/select colors for light theme if needed */
+.theme-light select,
+.theme-light button {
+  /* Example: ensure text is readable on light background */
+   /* color: #1f2937; */ /* Handled by specific button classes now */
+}
+
+.theme-light .text-white {
+    color: #1f2937; /* Override text-white for light theme */
+}
+.theme-light .text-yellow-300 {
+    color: #ca8a04; /* Adjust yellow for light theme */
+}
+
+/* ... other styles ... */
